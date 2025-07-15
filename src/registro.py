@@ -80,3 +80,12 @@ def menu_principal():
             break
         else:
             print("Opción inválida.")
+
+def eliminar_actividad(indice):
+    """Elimina una actividad por su índice"""
+    datos = cargar_datos()
+    if 0 <= indice < len(datos):
+        datos.pop(indice)
+        guardar_datos(datos)
+        return True
+    return False

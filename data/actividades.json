@@ -1,9 +1,23 @@
 [
     {
-        "tipo": "Ciclismo",
-        "fecha": "2025-05-04",
-        "duracion_min": "76",
-        "distancia_km": "5.0",
-        "comentarios": "Prueba 1"
+        "tipo": "Trail running",
+        "fecha": "2025-07-05",
+        "duracion_min": "126",
+        "distancia_km": "50.0",
+        "comentarios": "prueba"
+    },
+    {
+        "tipo": "Trail running",
+        "fecha": "2025-07-05",
+        "duracion_min": "126",
+        "distancia_km": "50.0",
+        "comentarios": "prueba"
+    },
+    {
+        "tipo": "Trail running",
+        "fecha": "2025-07-05",
+        "duracion_min": "126",
+        "distancia_km": "51.0",
+        "comentarios": "prueba"
     }
 ]

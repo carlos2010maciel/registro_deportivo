@@ -56,7 +56,7 @@ class RegistroDeportivoApp:
 
     def guardar_actividad(self):
 
-     #   print("Guardando en:", ARCHIVO_DATOS)  # Para depurar
+        #print("Guardando en:", ARCHIVO_DATOS)  # Para depurar
 
         """Guarda la actividad validando campos obligatorios"""
         tipo = self.tipo_var.get().strip()
@@ -102,7 +102,7 @@ class RegistroDeportivoApp:
                 messagebox.showerror("Error", f"No se pudo guardar la actividad: {e}")
 
     def mostrar_registro(self):
-        """Muestra todas las actividades guardadas en una lista"""
+        """Muestra todas las actividades guardadas con opción de eliminar"""
         self.limpiar_ventana()
 
         frame = ttk.Frame(self.root, padding="10")
@@ -110,19 +110,50 @@ class RegistroDeportivoApp:
 
         ttk.Label(frame, text="Registro de Actividades", font=("Arial", 14)).pack(pady=10)
 
+        # Listbox con scrollbar
+        listbox_frame = ttk.Frame(frame)
+        listbox_frame.pack(pady=10, fill="both", expand=True)
+
+        scrollbar = ttk.Scrollbar(listbox_frame)
+        scrollbar.pack(side="right", fill="y")
+
+        self.listbox = tk.Listbox(listbox_frame, yscrollcommand=scrollbar.set, width=60, height=15)
+        self.listbox.pack(side="left", fill="both", expand=True)
+        scrollbar.config(command=self.listbox.yview)
+
+        # Cargar datos
         datos = registro.cargar_datos()
+        self.datos_actuales = datos  # Guardamos los datos para usarlos al eliminar
 
         if not datos:
-            ttk.Label(frame, text="No hay actividades registradas.").pack()
+            self.listbox.insert(tk.END, "No hay actividades registradas.")
         else:
-            listbox = tk.Listbox(frame, width=60, height=10)
-            listbox.pack(pady=10)
-
             for idx, act in enumerate(datos):
                 texto = f"{idx+1}. {act['tipo']} - {act['fecha']} - {act['duracion_min']} min - {act['distancia_km']} km"
-                listbox.insert(tk.END, texto)
+                self.listbox.insert(tk.END, texto)
 
-        ttk.Button(frame, text="Volver", command=self.crear_menu_principal).pack(pady=10)
+        # Botones
+        btn_frame = ttk.Frame(frame)
+        btn_frame.pack(pady=10)
+
+        ttk.Button(btn_frame, text="Eliminar seleccionada", command=self.eliminar_seleccionada).pack(side="left", padx=5)
+        ttk.Button(btn_frame, text="Volver", command=self.crear_menu_principal).pack(side="left", padx=5)
+
+    def eliminar_seleccionada(self):
+        """Elimina la actividad seleccionada"""
+        seleccion = self.listbox.curselection()
+        if not seleccion:
+            messagebox.showwarning("Advertencia", "Por favor, selecciona una actividad.")
+            return
+
+        indice = seleccion[0]
+        confirmacion = messagebox.askyesno("Confirmar", "¿Estás seguro de eliminar esta actividad?")
+        if confirmacion:
+            if registro.eliminar_actividad(indice):
+                messagebox.showinfo("Éxito", "Actividad eliminada correctamente.")
+                self.mostrar_registro()  # Recargar listado
+            else:
+                messagebox.showerror("Error", "No se pudo eliminar la actividad.")
 
     def limpiar_ventana(self):
         """Limpia todos los widgets de la ventana"""
