@@ -1,17 +1,35 @@
 # src/registro.py
-import json
 import os
+import json
 from datetime import datetime
+import tkinter.messagebox as messagebox  # 👈 Añade esta línea
 
-ARCHIVO_DATOS = "../data/actividades.json"
+# Ruta dinámica al archivo de datos
+directorio_actual = os.path.dirname(os.path.abspath(__file__))
+ARCHIVO_DATOS = os.path.join(directorio_actual, "..", "data", "actividades.json")
 
 def cargar_datos():
+    os.makedirs(os.path.dirname(ARCHIVO_DATOS), exist_ok=True)
+    
     if not os.path.exists(ARCHIVO_DATOS):
+        return []  # Si no existe, devolvemos lista vacía
+    
+    try:
+        with open(ARCHIVO_DATOS, "r", encoding="utf-8") as f:
+            contenido = f.read()
+            if not contenido.strip():  # Archivo vacío
+                return []
+            return json.loads(contenido)
+    except json.JSONDecodeError:
+        messagebox.showerror("Error", "El archivo de datos está corrupto.")
         return []
-    with open(ARCHIVO_DATOS, "r", encoding="utf-8") as f:
-        return json.load(f)
 
 def guardar_datos(datos):
+    os.makedirs(os.path.dirname(ARCHIVO_DATOS), exist_ok=True)
+    
+    # 🔍 Línea de depuración (verifica qué ruta está usando)
+    print("Guardando en:", ARCHIVO_DATOS)
+
     with open(ARCHIVO_DATOS, "w", encoding="utf-8") as f:
         json.dump(datos, f, indent=4, ensure_ascii=False)
 
