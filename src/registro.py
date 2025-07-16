@@ -4,6 +4,24 @@ import json
 from datetime import datetime
 import tkinter.messagebox as messagebox  # 👈 Añade esta línea
 
+# Lista de actividades predefinidas
+ACTIVIDADES_PREDEFINIDAS = [
+    "Caminata",
+    "Running",
+    "Trail Running",
+    "Ciclismo Ruta",
+    "Ciclismo de Montaña",
+    "Funcional sin pesas",
+    "Movilidad articular dinámica",
+    "Elongación",
+    "Natación",
+    "Gimnasio",
+    "Yoga",
+    "Pilates",
+    "Escalada",
+    "Crossfit"
+]
+
 # Ruta dinámica al archivo de datos
 directorio_actual = os.path.dirname(os.path.abspath(__file__))
 ARCHIVO_DATOS = os.path.join(directorio_actual, "..", "data", "actividades.json")

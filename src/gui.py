@@ -41,7 +41,9 @@ class RegistroDeportivoApp:
         # Campos del formulario
         ttk.Label(frame, text="Tipo de actividad").grid(row=1, column=0, sticky="w")
         self.tipo_var = tk.StringVar()
-        ttk.Entry(frame, textvariable=self.tipo_var, width=30).grid(row=1, column=1, pady=5)
+        self.combo_tipo = ttk.Combobox(frame, textvariable=self.tipo_var, values=registro.ACTIVIDADES_PREDEFINIDAS, width=28)
+        self.combo_tipo.grid(row=1, column=1, pady=5)
+        self.combo_tipo.set("Selecciona o escribe una actividad")
 
         ttk.Label(frame, text="Fecha (YYYY-MM-DD)").grid(row=2, column=0, sticky="w")
         self.fecha_var = tk.StringVar()
@@ -185,7 +187,9 @@ class RegistroDeportivoApp:
         # Campos del formulario
         ttk.Label(frame, text="Tipo de actividad").grid(row=1, column=0, sticky="w")
         self.tipo_var = tk.StringVar(value=actividad["tipo"])
-        ttk.Entry(frame, textvariable=self.tipo_var, width=30).grid(row=1, column=1, pady=5)
+        self.combo_tipo = ttk.Combobox(frame, textvariable=self.tipo_var, values=registro.ACTIVIDADES_PREDEFINIDAS, width=28)
+        self.combo_tipo.grid(row=1, column=1, pady=5)
+        self.combo_tipo.set(actividad["tipo"])  # Mantiene el valor original si no está en la lista
 
         ttk.Label(frame, text="Fecha (YYYY-MM-DD)").grid(row=2, column=0, sticky="w")
         self.fecha_var = tk.StringVar(value=actividad["fecha"])

@@ -42,10 +42,17 @@
         "comentarios": "t"
     },
     {
-        "tipo": "hhoi",
+        "tipo": "Caminata",
         "fecha": "2024",
         "duracion_min": "654",
         "distancia_km": "345.0",
         "comentarios": "er"
+    },
+    {
+        "tipo": "Trail Running",
+        "fecha": "2025-07-09",
+        "duracion_min": "78",
+        "distancia_km": "12.75",
+        "comentarios": "Fondito patrio"
     }
 ]
