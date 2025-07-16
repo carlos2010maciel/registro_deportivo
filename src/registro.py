@@ -89,3 +89,12 @@ def eliminar_actividad(indice):
         guardar_datos(datos)
         return True
     return False
+
+def editar_actividad(indice, nueva_actividad):
+    """Edita una actividad por su índice"""
+    datos = cargar_datos()
+    if 0 <= indice < len(datos):
+        datos[indice] = nueva_actividad
+        guardar_datos(datos)
+        return True
+    return False

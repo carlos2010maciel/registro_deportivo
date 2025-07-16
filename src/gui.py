@@ -146,6 +146,7 @@ class RegistroDeportivoApp:
         btn_frame.pack(pady=10)
 
         ttk.Button(btn_frame, text="Eliminar seleccionada", command=self.eliminar_seleccionada).pack(side="left", padx=5)
+        ttk.Button(btn_frame, text="Editar seleccionada", command=self.editar_seleccionada).pack(side="left", padx=5)
         ttk.Button(btn_frame, text="Volver", command=self.crear_menu_principal).pack(side="left", padx=5)
 
     def eliminar_seleccionada(self):
@@ -163,6 +164,80 @@ class RegistroDeportivoApp:
                 self.mostrar_registro()  # Recargar listado
             else:
                 messagebox.showerror("Error", "No se pudo eliminar la actividad.")
+
+    def editar_seleccionada(self):
+        """Carga los datos de la actividad seleccionada para editarla"""
+        seleccion = self.listbox.curselection()
+        if not seleccion:
+            messagebox.showwarning("Advertencia", "Por favor, selecciona una actividad.")
+            return
+
+        self.indice_editar = seleccion[0]  # Guardamos el índice para usarlo luego
+        actividad = self.datos_actuales[self.indice_editar]
+
+        self.limpiar_ventana()
+
+        frame = ttk.Frame(self.root, padding="10")
+        frame.pack(fill="both", expand=True)
+
+        ttk.Label(frame, text="Editar Actividad", font=("Arial", 14)).grid(row=0, column=0, columnspan=2, pady=10)
+
+        # Campos del formulario
+        ttk.Label(frame, text="Tipo de actividad").grid(row=1, column=0, sticky="w")
+        self.tipo_var = tk.StringVar(value=actividad["tipo"])
+        ttk.Entry(frame, textvariable=self.tipo_var, width=30).grid(row=1, column=1, pady=5)
+
+        ttk.Label(frame, text="Fecha (YYYY-MM-DD)").grid(row=2, column=0, sticky="w")
+        self.fecha_var = tk.StringVar(value=actividad["fecha"])
+        ttk.Entry(frame, textvariable=self.fecha_var, width=30).grid(row=2, column=1, pady=5)
+
+        ttk.Label(frame, text="Duración (minutos)").grid(row=3, column=0, sticky="w")
+        self.duracion_var = tk.StringVar(value=actividad["duracion_min"])
+        ttk.Entry(frame, textvariable=self.duracion_var, width=30).grid(row=3, column=1, pady=5)
+
+        ttk.Label(frame, text="Distancia (km)").grid(row=4, column=0, sticky="w")
+        self.distancia_var = tk.StringVar(value=actividad["distancia_km"])
+        ttk.Entry(frame, textvariable=self.distancia_var, width=30).grid(row=4, column=1, pady=5)
+
+        ttk.Label(frame, text="Comentarios").grid(row=5, column=0, sticky="w")
+        self.comentarios_var = tk.StringVar(value=actividad["comentarios"])
+        ttk.Entry(frame, textvariable=self.comentarios_var, width=30).grid(row=5, column=1, pady=5)
+
+        ttk.Button(frame, text="Guardar Cambios", command=self.guardar_edicion).grid(row=6, column=0, pady=10)
+        ttk.Button(frame, text="Cancelar", command=self.mostrar_registro).grid(row=6, column=1, pady=10)
+    
+    def guardar_edicion(self):
+        """Guarda los cambios realizados en una actividad"""
+        tipo = self.tipo_var.get().strip()
+        fecha = self.fecha_var.get().strip()
+        duracion = self.duracion_var.get().strip()
+        distancia = self.distancia_var.get().strip()
+        comentarios = self.comentarios_var.get().strip()
+
+        if not tipo or not fecha or not duracion or not distancia:
+            messagebox.showwarning("Advertencia", "Todos los campos son obligatorios.")
+            return
+
+        try:
+            duracion = int(duracion)
+            distancia = float(distancia)
+        except ValueError:
+            messagebox.showerror("Error", "Duración debe ser un número entero y distancia un número decimal.")
+            return
+
+        actividad_editada = {
+            "tipo": tipo,
+            "fecha": fecha,
+            "duracion_min": str(duracion),
+            "distancia_km": str(distancia),
+            "comentarios": comentarios
+        }
+
+        if registro.editar_actividad(self.indice_editar, actividad_editada):
+            messagebox.showinfo("Éxito", "Actividad actualizada correctamente.")
+            self.mostrar_registro()
+        else:
+            messagebox.showerror("Error", "No se pudo actualizar la actividad.")
 
     def limpiar_ventana(self):
         """Limpia todos los widgets de la ventana"""
