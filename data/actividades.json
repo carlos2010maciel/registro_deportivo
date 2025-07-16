@@ -19,5 +19,40 @@
         "duracion_min": "126",
         "distancia_km": "51.0",
         "comentarios": "prueba"
+    },
+    {
+        "tipo": "Ciclism",
+        "fecha": "025-06-30",
+        "duracion_min": "200",
+        "distancia_km": "100.0",
+        "comentarios": "prueba"
+    },
+    {
+        "tipo": "Prueba",
+        "fecha": "2024-06-23",
+        "duracion_min": "100",
+        "distancia_km": "19.0",
+        "comentarios": "prueba"
+    },
+    {
+        "tipo": "Prueba",
+        "fecha": "2024-06-23",
+        "duracion_min": "100",
+        "distancia_km": "19.0",
+        "comentarios": "prueba"
+    },
+    {
+        "tipo": "26h",
+        "fecha": "2025",
+        "duracion_min": "6",
+        "distancia_km": "3.0",
+        "comentarios": "t"
+    },
+    {
+        "tipo": "hhoi",
+        "fecha": "2024",
+        "duracion_min": "654",
+        "distancia_km": "345.0",
+        "comentarios": "er"
     }
 ]

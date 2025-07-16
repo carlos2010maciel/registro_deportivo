@@ -11,6 +11,14 @@ class RegistroDeportivoApp:
         self.root.geometry("400x300")
 
         self.crear_menu_principal()
+    
+    def limpiar_campos(self):
+        """Limpia todos los campos del formulario"""
+        self.tipo_var.set("")
+        self.fecha_var.set("")
+        self.duracion_var.set("")
+        self.distancia_var.set("")
+        self.comentarios_var.set("")
 
     def crear_menu_principal(self):
         """Muestra el menú principal"""
@@ -89,6 +97,7 @@ class RegistroDeportivoApp:
             datos.append(actividad)
             registro.guardar_datos(datos)
             messagebox.showinfo("Éxito", "Actividad registrada y guardada.")
+            self.limpiar_campos()
         except Exception as e:
             messagebox.showerror("Error", f"No se pudo guardar: {e}")
 
@@ -159,7 +168,6 @@ class RegistroDeportivoApp:
         """Limpia todos los widgets de la ventana"""
         for widget in self.root.winfo_children():
             widget.destroy()
-
 
 def iniciar_gui():
     root = tk.Tk()
