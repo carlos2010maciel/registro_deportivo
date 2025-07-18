@@ -14,14 +14,14 @@
         "comentarios": "prueba"
     },
     {
-        "tipo": "Running",
+        "tipo": "Trail Running",
         "fecha": "2025-07-17",
         "inicio": "17:00",
-        "fin": "18:30",
-        "distancia_km": "8.5",
+        "fin": "18:34",
+        "distancia_km": "8.9",
         "calorias_kcal": "258",
         "lugar": "Puerto Rico",
         "comentarios": "Prueba",
-        "duracion_min": "90"
+        "duracion_min": "94"
     }
 ]

@@ -214,58 +214,89 @@ class RegistroDeportivoApp:
 
         ttk.Label(frame, text="Editar Actividad", font=("Arial", 14)).grid(row=0, column=0, columnspan=2, pady=10)
 
-        # Campos del formulario
+        # Campo: Tipo de actividad (con Combobox)
         ttk.Label(frame, text="Tipo de actividad").grid(row=1, column=0, sticky="w")
-        self.tipo_var = tk.StringVar(value=actividad["tipo"])
+        self.tipo_var = tk.StringVar(value=actividad.get("tipo", ""))
         self.combo_tipo = ttk.Combobox(frame, textvariable=self.tipo_var, values=registro.ACTIVIDADES_PREDEFINIDAS, width=28)
         self.combo_tipo.grid(row=1, column=1, pady=5)
-        self.combo_tipo.set(actividad["tipo"])  # Mantiene el valor original si no está en la lista
+        self.combo_tipo.set(actividad.get("tipo", "Selecciona o escribe una actividad"))
 
+        # Campo: Fecha
         ttk.Label(frame, text="Fecha (YYYY-MM-DD)").grid(row=2, column=0, sticky="w")
-        self.fecha_var = tk.StringVar(value=actividad["fecha"])
+        self.fecha_var = tk.StringVar(value=actividad.get("fecha", ""))
         ttk.Entry(frame, textvariable=self.fecha_var, width=30).grid(row=2, column=1, pady=5)
 
-        ttk.Label(frame, text="Duración (minutos)").grid(row=3, column=0, sticky="w")
-        self.duracion_var = tk.StringVar(value=actividad["duracion_min"])
-        ttk.Entry(frame, textvariable=self.duracion_var, width=30).grid(row=3, column=1, pady=5)
+        # Campo: Hora de inicio
+        ttk.Label(frame, text="Hora de inicio (HH:MM)").grid(row=3, column=0, sticky="w")
+        self.inicio_var = tk.StringVar(value=actividad.get("inicio", ""))
+        ttk.Entry(frame, textvariable=self.inicio_var, width=30).grid(row=3, column=1, pady=5)
 
-        ttk.Label(frame, text="Distancia (km)").grid(row=4, column=0, sticky="w")
-        self.distancia_var = tk.StringVar(value=actividad["distancia_km"])
-        ttk.Entry(frame, textvariable=self.distancia_var, width=30).grid(row=4, column=1, pady=5)
+        # Campo: Hora de finalización
+        ttk.Label(frame, text="Hora de finalización (HH:MM)").grid(row=4, column=0, sticky="w")
+        self.fin_var = tk.StringVar(value=actividad.get("fin", ""))
+        ttk.Entry(frame, textvariable=self.fin_var, width=30).grid(row=4, column=1, pady=5)
 
-        ttk.Label(frame, text="Comentarios").grid(row=5, column=0, sticky="w")
-        self.comentarios_var = tk.StringVar(value=actividad["comentarios"])
-        ttk.Entry(frame, textvariable=self.comentarios_var, width=30).grid(row=5, column=1, pady=5)
+        # Campo: Distancia
+        ttk.Label(frame, text="Distancia (km)").grid(row=5, column=0, sticky="w")
+        self.distancia_var = tk.StringVar(value=actividad.get("distancia_km", ""))
+        ttk.Entry(frame, textvariable=self.distancia_var, width=30).grid(row=5, column=1, pady=5)
 
-        ttk.Button(frame, text="Guardar Cambios", command=self.guardar_edicion).grid(row=6, column=0, pady=10)
-        ttk.Button(frame, text="Cancelar", command=self.mostrar_registro).grid(row=6, column=1, pady=10)
+        # Campo: Calorías
+        ttk.Label(frame, text="Calorías quemadas (kcal)").grid(row=6, column=0, sticky="w")
+        self.calorias_var = tk.StringVar(value=actividad.get("calorias_kcal", ""))
+        ttk.Entry(frame, textvariable=self.calorias_var, width=30).grid(row=6, column=1, pady=5)
+
+        # Campo: Lugar
+        ttk.Label(frame, text="Lugar").grid(row=7, column=0, sticky="w")
+        self.lugar_var = tk.StringVar(value=actividad.get("lugar", ""))
+        ttk.Entry(frame, textvariable=self.lugar_var, width=30).grid(row=7, column=1, pady=5)
+
+        # Campo: Comentarios
+        ttk.Label(frame, text="Comentarios").grid(row=8, column=0, sticky="w")
+        self.comentarios_var = tk.StringVar(value=actividad.get("comentarios", ""))
+        ttk.Entry(frame, textvariable=self.comentarios_var, width=30).grid(row=8, column=1, pady=5)
+
+        # Botones
+        ttk.Button(frame, text="Guardar Cambios", command=self.guardar_edicion).grid(row=9, column=0, pady=10)
+        ttk.Button(frame, text="Cancelar", command=self.mostrar_registro).grid(row=9, column=1, pady=10)
     
     def guardar_edicion(self):
         """Guarda los cambios realizados en una actividad"""
         tipo = self.tipo_var.get().strip()
         fecha = self.fecha_var.get().strip()
-        duracion = self.duracion_var.get().strip()
+        inicio = self.inicio_var.get().strip()
+        fin = self.fin_var.get().strip()
         distancia = self.distancia_var.get().strip()
+        calorias = self.calorias_var.get().strip()
+        lugar = self.lugar_var.get().strip()
         comentarios = self.comentarios_var.get().strip()
 
-        if not tipo or not fecha or not duracion or not distancia:
-            messagebox.showwarning("Advertencia", "Todos los campos son obligatorios.")
+        if not tipo or not fecha:
+            messagebox.showwarning("Advertencia", "Tipo y fecha son obligatorios.")
             return
 
-        try:
-            duracion = int(duracion)
-            distancia = float(distancia)
-        except ValueError:
-            messagebox.showerror("Error", "Duración debe ser un número entero y distancia un número decimal.")
-            return
+        # Calcular duración si se proporcionan hora de inicio y fin
+        duracion_calculada = None
+        if inicio and fin:
+            duracion_calculada = registro.calcular_duracion(inicio, fin)
+            if duracion_calculada is None:
+                messagebox.showerror("Error", "Horas inválidas. Usa el formato HH:MM.")
+                return
 
+        # Crear diccionario con los nuevos datos
         actividad_editada = {
             "tipo": tipo,
             "fecha": fecha,
-            "duracion_min": str(duracion),
-            "distancia_km": str(distancia),
-            "comentarios": comentarios
+            "inicio": inicio,
+            "fin": fin,
+            "distancia_km": distancia,
+            "calorias_kcal": calorias,
+            "lugar": lugar,
+            "comentarios": comentarios,
         }
+
+        if duracion_calculada:
+            actividad_editada["duracion_min"] = str(duracion_calculada)
 
         if registro.editar_actividad(self.indice_editar, actividad_editada):
             messagebox.showinfo("Éxito", "Actividad actualizada correctamente.")
