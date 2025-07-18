@@ -3,56 +3,25 @@
         "tipo": "Trail running",
         "fecha": "2025-07-05",
         "duracion_min": "126",
-        "distancia_km": "50.0",
-        "comentarios": "prueba"
-    },
-    {
-        "tipo": "Trail running",
-        "fecha": "2025-07-05",
-        "duracion_min": "126",
-        "distancia_km": "50.0",
-        "comentarios": "prueba"
-    },
-    {
-        "tipo": "Trail running",
-        "fecha": "2025-07-05",
-        "duracion_min": "126",
         "distancia_km": "51.0",
         "comentarios": "prueba"
     },
     {
-        "tipo": "Ciclism",
-        "fecha": "025-06-30",
-        "duracion_min": "200",
-        "distancia_km": "100.0",
-        "comentarios": "prueba"
-    },
-    {
-        "tipo": "Prueba",
+        "tipo": "Trail Running",
         "fecha": "2024-06-23",
         "duracion_min": "100",
         "distancia_km": "19.0",
         "comentarios": "prueba"
     },
     {
-        "tipo": "Caminata",
-        "fecha": "2025",
-        "duracion_min": "6",
-        "distancia_km": "3.0",
-        "comentarios": "t"
-    },
-    {
-        "tipo": "Caminata",
-        "fecha": "2024",
-        "duracion_min": "654",
-        "distancia_km": "345.0",
-        "comentarios": "er"
-    },
-    {
-        "tipo": "Trail Running",
-        "fecha": "2025-07-09",
-        "duracion_min": "78",
-        "distancia_km": "12.75",
-        "comentarios": "Fondito patrio"
+        "tipo": "Running",
+        "fecha": "2025-07-17",
+        "inicio": "17:00",
+        "fin": "18:30",
+        "distancia_km": "8.5",
+        "calorias_kcal": "258",
+        "lugar": "Puerto Rico",
+        "comentarios": "Prueba",
+        "duracion_min": "90"
     }
 ]

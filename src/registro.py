@@ -116,3 +116,12 @@ def editar_actividad(indice, nueva_actividad):
         guardar_datos(datos)
         return True
     return False
+
+def calcular_duracion(inicio, fin):
+    try:
+        h_inicio = datetime.strptime(inicio, "%H:%M")
+        h_fin = datetime.strptime(fin, "%H:%M")
+        duracion = (h_fin - h_inicio).total_seconds() / 60  # minutos
+        return int(duracion)
+    except Exception:
+        return None
