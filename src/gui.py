@@ -13,12 +13,9 @@ class RegistroDeportivoApp:
         self.crear_menu_principal()
     
     def limpiar_campos(self):
-        """Limpia todos los campos del formulario"""
-        self.tipo_var.set("")
-        self.fecha_var.set("")
-        self.duracion_var.set("")
-        self.distancia_var.set("")
-        self.comentarios_var.set("")
+        """Limpia todos los campos del formulario accediendo a los Entry en self.campos"""
+        for campo in self.campos.values():
+            campo["entry"].delete(0, tk.END)  # Borra el contenido del Entry
 
     def crear_menu_principal(self):
         """Muestra el menú principal"""
@@ -30,7 +27,6 @@ class RegistroDeportivoApp:
         ttk.Button(self.root, text="Ver Registro", command=self.mostrar_registro).pack(pady=10)
 
     def mostrar_formulario(self):
-        """Formulario organizado para registrar una nueva actividad"""
         self.limpiar_ventana()
 
         frame = ttk.Frame(self.root, padding="10")
@@ -38,77 +34,99 @@ class RegistroDeportivoApp:
 
         ttk.Label(frame, text="Registrar Nueva Actividad", font=("Arial", 14)).grid(row=0, column=0, columnspan=2, pady=10)
 
-        # Campos del formulario
         # Campo: Tipo de actividad
         ttk.Label(frame, text="Tipo de actividad").grid(row=1, column=0, sticky="w")
         self.tipo_var = tk.StringVar()
         self.combo_tipo = ttk.Combobox(frame, textvariable=self.tipo_var, values=registro.ACTIVIDADES_PREDEFINIDAS, width=28)
         self.combo_tipo.grid(row=1, column=1, pady=5)
         self.combo_tipo.set("Selecciona o escribe una actividad")
+        self.combo_tipo.bind("<<ComboboxSelected>>", lambda e: self.actualizar_visibilidad_campos())
+
+        # Campos posibles (todos se crean, pero se ocultan/muestran dinámicamente)
+        self.campos = {}
 
         # Campo: Fecha
-        ttk.Label(frame, text="Fecha (YYYY-MM-DD)").grid(row=2, column=0, sticky="w")
-        self.fecha_var = tk.StringVar()
-        ttk.Entry(frame, textvariable=self.fecha_var, width=30).grid(row=2, column=1, pady=5)
+        self.campos["fecha"] = {
+            "label": ttk.Label(frame, text="Fecha (YYYY-MM-DD)"),
+            "entry": ttk.Entry(frame, textvariable=tk.StringVar(), width=30)
+        }
+        self.campos["fecha"]["label"].grid(row=2, column=0, sticky="w")
+        self.campos["fecha"]["entry"].grid(row=2, column=1, pady=5)
 
-        # Campo: Hora de inicio
-        ttk.Label(frame, text="Hora de inicio (HH:MM)").grid(row=6, column=0, sticky="w")
-        self.inicio_var = tk.StringVar()
-        ttk.Entry(frame, textvariable=self.inicio_var, width=30).grid(row=6, column=1, pady=5)
+        # Campo: Inicio
+        self.campos["inicio"] = {
+            "label": ttk.Label(frame, text="Hora de inicio (HH:MM)"),
+            "entry": ttk.Entry(frame, textvariable=tk.StringVar(), width=30)
+        }
+        self.campos["inicio"]["label"].grid(row=3, column=0, sticky="w")
+        self.campos["inicio"]["entry"].grid(row=3, column=1, pady=5)
 
-        # Campo: Hora de finalización
-        ttk.Label(frame, text="Hora de finalización (HH:MM)").grid(row=7, column=0, sticky="w")
-        self.fin_var = tk.StringVar()
-        ttk.Entry(frame, textvariable=self.fin_var, width=30).grid(row=7, column=1, pady=5)
-
-        # Campo: Calorías
-        ttk.Label(frame, text="Calorías quemadas (kcal)").grid(row=8, column=0, sticky="w")
-        self.calorias_var = tk.StringVar()
-        ttk.Entry(frame, textvariable=self.calorias_var, width=30).grid(row=8, column=1, pady=5)
-
-        # Campo: Lugar
-        ttk.Label(frame, text="Lugar").grid(row=9, column=0, sticky="w")
-        self.lugar_var = tk.StringVar()
-        ttk.Entry(frame, textvariable=self.lugar_var, width=30).grid(row=9, column=1, pady=5)
-
-        # Campo: Duración
-        ttk.Label(frame, text="Duración (minutos)").grid(row=3, column=0, sticky="w")
-        self.duracion_var = tk.StringVar()
-        ttk.Entry(frame, textvariable=self.duracion_var, width=30).grid(row=3, column=1, pady=5)
+        # Campo: Fin
+        self.campos["fin"] = {
+            "label": ttk.Label(frame, text="Hora de finalización (HH:MM)"),
+            "entry": ttk.Entry(frame, textvariable=tk.StringVar(), width=30)
+        }
+        self.campos["fin"]["label"].grid(row=4, column=0, sticky="w")
+        self.campos["fin"]["entry"].grid(row=4, column=1, pady=5)
 
         # Campo: Distancia
-        ttk.Label(frame, text="Distancia (km)").grid(row=4, column=0, sticky="w")
-        self.distancia_var = tk.StringVar()
-        ttk.Entry(frame, textvariable=self.distancia_var, width=30).grid(row=4, column=1, pady=5)
+        self.campos["distancia"] = {
+            "label": ttk.Label(frame, text="Distancia (km)"),
+            "entry": ttk.Entry(frame, textvariable=tk.StringVar(), width=30)
+        }
+        self.campos["distancia"]["label"].grid(row=5, column=0, sticky="w")
+        self.campos["distancia"]["entry"].grid(row=5, column=1, pady=5)
+
+        # Campo: Calorías
+        self.campos["calorias"] = {
+            "label": ttk.Label(frame, text="Calorías quemadas (kcal)"),
+            "entry": ttk.Entry(frame, textvariable=tk.StringVar(), width=30)
+        }
+        self.campos["calorias"]["label"].grid(row=6, column=0, sticky="w")
+        self.campos["calorias"]["entry"].grid(row=6, column=1, pady=5)
+
+        # Campo: Lugar
+        self.campos["lugar"] = {
+            "label": ttk.Label(frame, text="Lugar"),
+            "entry": ttk.Entry(frame, textvariable=tk.StringVar(), width=30)
+        }
+        self.campos["lugar"]["label"].grid(row=7, column=0, sticky="w")
+        self.campos["lugar"]["entry"].grid(row=7, column=1, pady=5)
 
         # Campo: Comentarios
-        ttk.Label(frame, text="Comentarios").grid(row=5, column=0, sticky="w")
-        self.comentarios_var = tk.StringVar()
-        ttk.Entry(frame, textvariable=self.comentarios_var, width=30).grid(row=5, column=1, pady=5)
+        self.campos["comentarios"] = {
+            "label": ttk.Label(frame, text="Comentarios"),
+            "entry": ttk.Entry(frame, textvariable=tk.StringVar(), width=30)
+        }
+        self.campos["comentarios"]["label"].grid(row=8, column=0, sticky="w")
+        self.campos["comentarios"]["entry"].grid(row=8, column=1, pady=5)
 
-        # Botones del formulario
-        # Botón guardar
-        ttk.Button(frame, text="Guardar", command=self.guardar_actividad).grid(row=6, column=0, pady=10)
-        # Botón volver
-        ttk.Button(frame, text="Volver", command=self.crear_menu_principal).grid(row=6, column=1, pady=10)
+        # Botón Guardar
+        ttk.Button(frame, text="Guardar", command=self.guardar_actividad).grid(row=9, column=0, pady=10)
+        ttk.Button(frame, text="Cancelar", command=self.crear_menu_principal).grid(row=9, column=1, pady=10)
+
+        # Inicialmente mostrar campos por defecto
+        self.actualizar_visibilidad_campos()
 
     def guardar_actividad(self):
-        # Obtener datos del formulario
+        """Guarda la actividad obteniendo los valores desde self.campos"""
+        
+        # Obtener valores desde los Entry del formulario
         tipo = self.tipo_var.get().strip()
-        fecha = self.fecha_var.get().strip()
-        inicio = self.inicio_var.get().strip()
-        fin = self.fin_var.get().strip()
-        distancia = self.distancia_var.get().strip()
-        calorias = self.calorias_var.get().strip()
-        lugar = self.lugar_var.get().strip()
-        comentarios = self.comentarios_var.get().strip()
+        fecha = self.campos["fecha"]["entry"].get().strip()
+        inicio = self.campos["inicio"]["entry"].get().strip()
+        fin = self.campos["fin"]["entry"].get().strip()
+        distancia = self.campos["distancia"]["entry"].get().strip()
+        calorias = self.campos["calorias"]["entry"].get().strip()
+        lugar = self.campos["lugar"]["entry"].get().strip()
+        comentarios = self.campos["comentarios"]["entry"].get().strip()
 
         # Validaciones mínimas
         if not tipo or not fecha:
             messagebox.showwarning("Advertencia", "Tipo y fecha son obligatorios.")
             return
 
-        # Calcular duración si se ingresan ambas horas
+        # Calcular duración si hay hora de inicio y fin
         duracion_calculada = None
         if inicio and fin:
             duracion_calculada = registro.calcular_duracion(inicio, fin)
@@ -116,7 +134,7 @@ class RegistroDeportivoApp:
                 messagebox.showerror("Error", "Horas inválidas. Usa el formato HH:MM.")
                 return
 
-        # ✅ Aquí defines 'actividad' después de validar y calcular
+        # Crear diccionario con la actividad
         actividad = {
             "tipo": tipo,
             "fecha": fecha,
@@ -128,11 +146,10 @@ class RegistroDeportivoApp:
             "comentarios": comentarios,
         }
 
-        # Agregar duración calculada si existe
         if duracion_calculada:
             actividad["duracion_min"] = str(duracion_calculada)
 
-        # Guardar actividad
+        # Guardar
         try:
             datos = registro.cargar_datos()
             datos.append(actividad)
@@ -180,6 +197,32 @@ class RegistroDeportivoApp:
         ttk.Button(btn_frame, text="Eliminar seleccionada", command=self.eliminar_seleccionada).pack(side="left", padx=5)
         ttk.Button(btn_frame, text="Editar seleccionada", command=self.editar_seleccionada).pack(side="left", padx=5)
         ttk.Button(btn_frame, text="Volver", command=self.crear_menu_principal).pack(side="left", padx=5)
+
+    def actualizar_visibilidad_campos(self):
+        tipo_seleccionado = self.tipo_var.get()
+
+        # Determinar a qué grupo pertenece
+        grupo = None
+        for nombre_grupo, tipos in registro.GRUPOS_ACTIVIDADES.items():
+            if tipo_seleccionado in tipos:
+                grupo = nombre_grupo
+                break
+
+        # Determinar qué campos mostrar
+        campos_a_mostrar = registro.CAMPOS_VISIBILIDAD.get(grupo, [])
+
+        # Ocultar todos los campos
+        for campo in self.campos.values():
+            campo["label"].grid_remove()
+            campo["entry"].grid_remove()
+
+        # Mostrar solo los relevantes
+        fila = 2
+        for key in campos_a_mostrar:
+            if key in self.campos:
+                self.campos[key]["label"].grid(row=fila, column=0, sticky="w")
+                self.campos[key]["entry"].grid(row=fila, column=1, pady=5)
+                fila += 1
 
     def eliminar_seleccionada(self):
         """Elimina la actividad seleccionada"""

@@ -12,15 +12,54 @@ ACTIVIDADES_PREDEFINIDAS = [
     "Ciclismo Ruta",
     "Ciclismo de Montaña",
     "Funcional sin pesas",
+    "Funcional con pesas",
     "Movilidad articular dinámica",
     "Elongación",
-    "Natación",
-    "Gimnasio",
+    "Piscina",
+    "Aguas abiertas",
     "Yoga",
-    "Pilates",
-    "Escalada",
-    "Crossfit"
+    "Pilates"
 ]
+
+# Grupos de actividades por tipo
+GRUPOS_ACTIVIDADES = {
+    "correr": [
+        "Caminata",
+        "Running",
+        "Trail Running"
+    ],
+    "ciclismo": [
+        "Ciclismo de Montaña",
+        "Ciclismo Ruta"
+    ],
+    "natacion": [
+        "Piscina",
+        "Aguas abiertas"
+    ],
+    "yoga": [
+        "Yoga",
+        "Pilates"
+    ],
+    "gimnasio": [
+        "Gimnasio",
+        "Funcional sin pesas",
+        "Funcional con pesas"
+    ],
+    "movilidad": [
+        "Movilidad articular dinámica",
+        "Elongación"
+    ]
+}
+
+# Configuración de campos visibles por grupo
+CAMPOS_VISIBILIDAD = {
+    "correr": ["fecha", "inicio", "fin", "distancia", "calorias", "lugar"], # "elevacion"
+    "ciclismo": ["fecha", "inicio", "fin", "distancia", "calorias", "lugar"], # "ruta_gpx"
+    "natacion": ["fecha", "inicio", "fin", "distancia", "lugar"], # "series", "estilo"
+    "yoga": ["fecha", "inicio", "fin"], # "duracion_manual", "estilo", "intensidad"
+    "gimnasio": ["fecha", "inicio", "fin"], # "duracion_manual", "rutina", "repeticiones"
+    "movilidad": ["fecha", "inicio", "fin"]
+}
 
 # Ruta dinámica al archivo de datos
 directorio_actual = os.path.dirname(os.path.abspath(__file__))

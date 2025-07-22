@@ -23,5 +23,38 @@
         "lugar": "Puerto Rico",
         "comentarios": "Prueba",
         "duracion_min": "94"
+    },
+    {
+        "tipo": "Caminata",
+        "fecha": "2025-07-17",
+        "inicio": "17:00",
+        "fin": "18:34",
+        "distancia_km": "8.9",
+        "calorias_kcal": "258",
+        "lugar": "Puerto Rico",
+        "comentarios": "Prueba",
+        "duracion_min": "94"
+    },
+    {
+        "tipo": "Funcional con pesas",
+        "fecha": "2025-07-21",
+        "inicio": "17:30",
+        "fin": "19:30",
+        "distancia_km": "",
+        "calorias_kcal": "",
+        "lugar": "",
+        "comentarios": "",
+        "duracion_min": "120"
+    },
+    {
+        "tipo": "Ciclismo de Montaña",
+        "fecha": "2025-07-20",
+        "inicio": "12:00",
+        "fin": "18:09",
+        "distancia_km": "100",
+        "calorias_kcal": "2897",
+        "lugar": "Puerto Rico",
+        "comentarios": "",
+        "duracion_min": "369"
     }
 ]
