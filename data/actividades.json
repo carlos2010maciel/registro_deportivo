@@ -1,17 +1,14 @@
 [
     {
-        "tipo": "Trail running",
-        "fecha": "2025-07-05",
-        "duracion_min": "126",
-        "distancia_km": "51.0",
-        "comentarios": "prueba"
-    },
-    {
         "tipo": "Trail Running",
-        "fecha": "2024-06-23",
-        "duracion_min": "100",
-        "distancia_km": "19.0",
-        "comentarios": "prueba"
+        "fecha": "2025-07-05",
+        "inicio": "",
+        "fin": "",
+        "distancia_km": "51.0",
+        "calorias_kcal": "",
+        "lugar": "",
+        "comentarios": "prueba",
+        "duracion_min": "0"
     },
     {
         "tipo": "Trail Running",
@@ -56,5 +53,16 @@
         "lugar": "Puerto Rico",
         "comentarios": "",
         "duracion_min": "369"
+    },
+    {
+        "tipo": "Trail Running",
+        "fecha": "2025-06-12",
+        "inicio": "7:00",
+        "fin": "14:00",
+        "distancia_km": "48",
+        "calorias_kcal": "",
+        "lugar": "Bernardo de Irigoyen",
+        "comentarios": "",
+        "duracion_min": "420"
     }
 ]

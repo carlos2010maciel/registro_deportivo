@@ -25,6 +25,7 @@ class RegistroDeportivoApp:
 
         ttk.Button(self.root, text="Registrar Nueva Actividad", command=self.mostrar_formulario).pack(pady=10)
         ttk.Button(self.root, text="Ver Registro", command=self.mostrar_registro).pack(pady=10)
+        ttk.Button(self.root, text="Ver Estadísticas", command=self.mostrar_estadisticas).pack(pady=10)
 
     def mostrar_formulario(self):
         self.limpiar_ventana()
@@ -187,7 +188,8 @@ class RegistroDeportivoApp:
             self.listbox.insert(tk.END, "No hay actividades registradas.")
         else:
             for idx, act in enumerate(datos):
-                texto = f"{idx+1}. {act['tipo']} - {act['fecha']} - {act['duracion_min']} min - {act['distancia_km']} km"
+                texto = f"{idx+1}. {act.get('tipo', 'Sin tipo')} - {act.get('fecha', 'Sin fecha')} - " \
+                        f"{act.get('duracion_min', '0')} min - {act.get('distancia_km', '0')} km"
                 self.listbox.insert(tk.END, texto)
 
         # Botones
@@ -351,6 +353,53 @@ class RegistroDeportivoApp:
         """Limpia todos los widgets de la ventana"""
         for widget in self.root.winfo_children():
             widget.destroy()
+
+    def mostrar_estadisticas(self):
+        self.limpiar_ventana()
+
+        frame = ttk.Frame(self.root, padding="10")
+        frame.pack(fill="both", expand=True)
+
+        ttk.Label(frame, text="Estadísticas por Tipo de Actividad", font=("Arial", 14)).pack(pady=10)
+
+        # Scrollbar para manejar muchos tipos
+        canvas = tk.Canvas(frame)
+        scrollbar = ttk.Scrollbar(frame, orient="vertical", command=canvas.yview)
+        scrollable_frame = ttk.Frame(canvas)
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        # Obtener estadísticas
+        stats = registro.calcular_estadisticas_por_tipo()
+
+        if not stats:
+            ttk.Label(scrollable_frame, text="No hay actividades registradas.").pack(pady=10)
+        else:
+            for tipo, datos in stats.items():
+                # Frame para cada tipo
+                tipo_frame = ttk.LabelFrame(scrollable_frame, text=tipo, padding="5")
+                tipo_frame.pack(fill="x", pady=5, padx=10)
+
+                ttk.Label(tipo_frame, text=f"Sesiones: {datos['cantidad']}").grid(row=0, column=0, sticky="w")
+                ttk.Label(tipo_frame, text=f"Total minutos: {datos['minutos_totales']}").grid(row=1, column=0, sticky="w")
+                ttk.Label(tipo_frame, text=f"Promedio: {datos['minutos_promedio']} min/sesión").grid(row=2, column=0, sticky="w")
+
+                ttk.Label(tipo_frame, text=f"Km totales: {datos['km_totales']} km").grid(row=0, column=1, sticky="w", padx=(20,0))
+                ttk.Label(tipo_frame, text=f"Promedio: {datos['km_promedio']} km/sesión").grid(row=1, column=1, sticky="w", padx=(20,0))
+
+                ttk.Label(tipo_frame, text=f"Calorías totales: {datos['calorias_totales']} kcal").grid(row=0, column=2, sticky="w", padx=(20,0))
+                ttk.Label(tipo_frame, text=f"Promedio: {datos['calorias_promedio']} kcal/sesión").grid(row=1, column=2, sticky="w", padx=(20,0))
+
+        ttk.Button(frame, text="Volver", command=self.crear_menu_principal).pack(pady=10)
 
 def iniciar_gui():
     root = tk.Tk()

@@ -69,17 +69,38 @@ def cargar_datos():
     os.makedirs(os.path.dirname(ARCHIVO_DATOS), exist_ok=True)
     
     if not os.path.exists(ARCHIVO_DATOS):
-        return []  # Si no existe, devolvemos lista vacía
-    
+        return []
+
     try:
         with open(ARCHIVO_DATOS, "r", encoding="utf-8") as f:
-            contenido = f.read()
-            if not contenido.strip():  # Archivo vacío
+            contenido = f.read().strip()
+            if not contenido:
                 return []
-            return json.loads(contenido)
-    except json.JSONDecodeError:
-        messagebox.showerror("Error", "El archivo de datos está corrupto.")
+            datos = json.loads(contenido)
+    except json.JSONDecodeError as e:
+        messagebox.showerror("Error", f"El archivo de datos está corrupto: {e}")
         return []
+
+    # Estructura por defecto para cada actividad
+    estructura_por_defecto = {
+        "tipo": "Sin tipo",
+        "fecha": "Sin fecha",
+        "inicio": "",
+        "fin": "",
+        "duracion_min": "0",
+        "distancia_km": "0",
+        "calorias_kcal": "0",
+        "lugar": "",
+        "comentarios": ""
+    }
+
+    # Reparar actividades incompletas
+    for act in datos:
+        for key, value in estructura_por_defecto.items():
+            if key not in act:
+                act[key] = value
+
+    return datos
 
 def guardar_datos(datos):
     os.makedirs(os.path.dirname(ARCHIVO_DATOS), exist_ok=True)
@@ -164,3 +185,40 @@ def calcular_duracion(inicio, fin):
         return int(duracion)
     except Exception:
         return None
+
+def calcular_estadisticas_por_tipo():
+    """Calcula estadísticas detalladas por tipo de actividad"""
+    datos = cargar_datos()
+    estadisticas = {}
+
+    for act in datos:
+        tipo = act.get("tipo", "Otros")
+        duracion = act.get("duracion_min", "0")
+        distancia = act.get("distancia_km", "0")
+        calorias = act.get("calorias_kcal", "0")
+
+        # Inicializar si no existe
+        if tipo not in estadisticas:
+            estadisticas[tipo] = {
+                "cantidad": 0,
+                "minutos_totales": 0,
+                "km_totales": 0.0,
+                "calorias_totales": 0.0
+            }
+
+        try:
+            estadisticas[tipo]["cantidad"] += 1
+            estadisticas[tipo]["minutos_totales"] += int(duracion)
+            estadisticas[tipo]["km_totales"] += float(distancia)
+            estadisticas[tipo]["calorias_totales"] += float(calorias)
+        except (ValueError, TypeError):
+            continue  # Ignorar si hay datos inválidos
+
+    # Calcular promedios
+    for tipo in estadisticas:
+        cant = estadisticas[tipo]["cantidad"]
+        estadisticas[tipo]["minutos_promedio"] = round(estadisticas[tipo]["minutos_totales"] / cant, 2) if cant else 0
+        estadisticas[tipo]["km_promedio"] = round(estadisticas[tipo]["km_totales"] / cant, 2) if cant else 0.0
+        estadisticas[tipo]["calorias_promedio"] = round(estadisticas[tipo]["calorias_totales"] / cant, 2) if cant else 0.0
+
+    return estadisticas
