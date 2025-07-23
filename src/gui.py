@@ -152,13 +152,11 @@ class RegistroDeportivoApp:
 
         # Guardar
         try:
-            datos = registro.cargar_datos()
-            datos.append(actividad)
-            registro.guardar_datos(datos)
-            messagebox.showinfo("Éxito", "Actividad registrada correctamente.")
-            self.limpiar_campos()
+            if registro.agregar_actividad(actividad):
+                messagebox.showinfo("Éxito", "Actividad registrada correctamente.")
+                self.limpiar_campos()
         except Exception as e:
-            messagebox.showerror("Error", f"No se pudo guardar: {e}")
+                messagebox.showerror("Error", f"No se pudo guardar: {e}")
 
     def mostrar_registro(self):
         """Muestra todas las actividades guardadas con opción de eliminar"""

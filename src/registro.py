@@ -1,5 +1,6 @@
 # src/registro.py
 import os
+from src import database
 import json
 from datetime import datetime
 import tkinter.messagebox as messagebox  # 👈 Añade esta línea
@@ -66,50 +67,47 @@ directorio_actual = os.path.dirname(os.path.abspath(__file__))
 ARCHIVO_DATOS = os.path.join(directorio_actual, "..", "data", "actividades.json")
 
 def cargar_datos():
-    os.makedirs(os.path.dirname(ARCHIVO_DATOS), exist_ok=True)
-    
-    if not os.path.exists(ARCHIVO_DATOS):
-        return []
-
+    """Carga todas las actividades desde SQLite"""
     try:
-        with open(ARCHIVO_DATOS, "r", encoding="utf-8") as f:
-            contenido = f.read().strip()
-            if not contenido:
-                return []
-            datos = json.loads(contenido)
-    except json.JSONDecodeError as e:
-        messagebox.showerror("Error", f"El archivo de datos está corrupto: {e}")
+        conn = database.conectar()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM actividades ORDER BY id DESC")
+        rows = cursor.fetchall()
+        conn.close()
+
+        # Convertir filas a lista de diccionarios
+        columnas = ["id", "tipo", "fecha", "inicio", "fin", "duracion_min", "distancia_km", "calorias_kcal", "lugar", "comentarios"]
+        return [dict(zip(columnas, row)) for row in rows]
+    except Exception as e:
+        messagebox.showerror("Error", f"No se pudieron cargar los datos: {e}")
         return []
 
-    # Estructura por defecto para cada actividad
-    estructura_por_defecto = {
-        "tipo": "Sin tipo",
-        "fecha": "Sin fecha",
-        "inicio": "",
-        "fin": "",
-        "duracion_min": "0",
-        "distancia_km": "0",
-        "calorias_kcal": "0",
-        "lugar": "",
-        "comentarios": ""
-    }
-
-    # Reparar actividades incompletas
-    for act in datos:
-        for key, value in estructura_por_defecto.items():
-            if key not in act:
-                act[key] = value
-
-    return datos
-
-def guardar_datos(datos):
-    os.makedirs(os.path.dirname(ARCHIVO_DATOS), exist_ok=True)
-    
-    # 🔍 Línea de depuración (verifica qué ruta está usando)
-    print("Guardando en:", ARCHIVO_DATOS)
-
-    with open(ARCHIVO_DATOS, "w", encoding="utf-8") as f:
-        json.dump(datos, f, indent=4, ensure_ascii=False)
+def agregar_actividad(actividad):
+    """Guarda una nueva actividad en SQLite"""
+    try:
+        conn = database.conectar()
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO actividades 
+            (tipo, fecha, inicio, fin, duracion_min, distancia_km, calorias_kcal, lugar, comentarios)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            actividad.get("tipo", ""),
+            actividad.get("fecha", ""),
+            actividad.get("inicio", ""),
+            actividad.get("fin", ""),
+            actividad.get("duracion_min", "0"),
+            actividad.get("distancia_km", "0"),
+            actividad.get("calorias_kcal", "0"),
+            actividad.get("lugar", ""),
+            actividad.get("comentarios", "")
+        ))
+        conn.commit()
+        conn.close()
+        return True
+    except Exception as e:
+        messagebox.showerror("Error", f"No se pudo guardar la actividad: {e}")
+        return False
 
 def nueva_actividad():
     print("\nRegistrar nueva actividad:")
@@ -161,21 +159,53 @@ def menu_principal():
 
 def eliminar_actividad(indice):
     """Elimina una actividad por su índice"""
-    datos = cargar_datos()
-    if 0 <= indice < len(datos):
-        datos.pop(indice)
-        guardar_datos(datos)
-        return True
-    return False
+    try:
+        datos = cargar_datos()
+        if 0 <= indice < len(datos):
+            id_actividad = datos[indice]["id"]
+            conn = database.conectar()
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM actividades WHERE id = ?", (id_actividad,))
+            conn.commit()
+            conn.close()
+            return True
+        return False
+    except Exception as e:
+        messagebox.showerror("Error", f"No se pudo eliminar la actividad: {e}")
+        return False
 
 def editar_actividad(indice, nueva_actividad):
-    """Edita una actividad por su índice"""
-    datos = cargar_datos()
-    if 0 <= indice < len(datos):
-        datos[indice] = nueva_actividad
-        guardar_datos(datos)
-        return True
-    return False
+    """Edita una actividad por su índice (posición en lista)"""
+    try:
+        datos = cargar_datos()
+        if 0 <= indice < len(datos):
+            id_actividad = datos[indice]["id"]
+            conn = database.conectar()
+            cursor = conn.cursor()
+            cursor.execute('''
+                UPDATE actividades SET
+                tipo = ?, fecha = ?, inicio = ?, fin = ?, duracion_min = ?,
+                distancia_km = ?, calorias_kcal = ?, lugar = ?, comentarios = ?
+                WHERE id = ?
+            ''', (
+                nueva_actividad.get("tipo", ""),
+                nueva_actividad.get("fecha", ""),
+                nueva_actividad.get("inicio", ""),
+                nueva_actividad.get("fin", ""),
+                nueva_actividad.get("duracion_min", "0"),
+                nueva_actividad.get("distancia_km", "0"),
+                nueva_actividad.get("calorias_kcal", "0"),
+                nueva_actividad.get("lugar", ""),
+                nueva_actividad.get("comentarios", ""),
+                id_actividad
+            ))
+            conn.commit()
+            conn.close()
+            return True
+        return False
+    except Exception as e:
+        messagebox.showerror("Error", f"No se pudo editar la actividad: {e}")
+        return False
 
 def calcular_duracion(inicio, fin):
     try:
