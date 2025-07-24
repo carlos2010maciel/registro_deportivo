@@ -39,6 +39,9 @@ __pycache__/
 *.pot
 *.spec
 
+#Releases
+release/*
+
 # Archivos temporales del sistema
 .DS_Store
 .cache
