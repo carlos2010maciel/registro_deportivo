@@ -1,0 +1,44 @@
+# Entornos virtuales
+venv/
+env/
+ENV/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache
+.coverage
+htmlcov/
+
+# PyInstaller
+/dist/
+/build/
+/main.spec
+
+# Archivos generados por tu sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs y editores
+.vscode/
+*.swp
+*.swo
+*~
+
+# Datos sensibles o innecesarios
+data/*
+!data/.gitkeep
+
+# Si usas PyInstaller u otros
+__pycache__/
+*.log
+*.pot
+*.spec
+
+# Archivos temporales del sistema
+.DS_Store
+.cache
