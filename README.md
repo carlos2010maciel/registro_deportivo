@@ -28,38 +28,45 @@ Desarrollada en Python con interfaz gráfica (Tkinter) y almacenamiento local (S
    # venv\Scripts\activate      # Windows
 
 3. Instala las dependencias
+    ```bash
     pip install -r requirements.txt
 
 4. Ejecuta la app
+    ```bash
     python main.py
 
 ## Cómo generar el ejecutable portable (Linux)
 
 1. Ejecuta el script de empaquetado:
+    ```bash
     ./build.sh      # Se generará un archivo en dist/RegistroDeportivo.
 
 ## Cómo usar desde una memoria USB
 
 1. Copia esta estructura a tu USB
 
-    RegistroDeportivo_USB/
-    ├── RegistroDeportivo
-    ├── data/
-    │   └── registro.db
-    └── README.txt
+        RegistroDeportivo_USB/
+        ├── RegistroDeportivo
+        ├── data/
+        │   └── registro.db
+        └── README.txt
 
 2. En cualquier computadora con Linux:
     
     Conecta la USB
     Abre una terminal en la carpeta
     Da permisos (si es necesario):
-        chmod +x RegistroDeportivo
+    ```bash
+    chmod +x RegistroDeportivo
     Ejecuta
-        ./RegistroDeportivo     # Los datos se guardan automáticamente en data/registro.db
+    ```bash
+    ./RegistroDeportivo     #Los datos se guardan automáticamente en data/registro.db
 
 ## ▶️ Cómo ejecutar el programa empaquetado
-    Linux : ./RegistroDeportivo
-    Windows : Haz doble clic en RegistroDeportivo.exe
+    Linux:
+    ```bash ./RegistroDeportivo
+    
+    Windows: Haz doble clic en RegistroDeportivo.exe
     "La primera ejecución puede tardar unos segundos."
 
 ## Notas
