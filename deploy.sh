@@ -70,20 +70,51 @@ echo "✅ Script de inicio creado: iniciar.sh"
 
 # Crear README
 cat > "$OUTPUT_DIR/README.txt" << EOF
-Registro Deportivo - Versión Portable
+========================================
+       REGISTRO DEPORTIVO - USB
+========================================
 
-Instrucciones:
-1. Copia esta carpeta a una USB o disco externo.
-2. Haz doble clic en 'iniciar.sh' para ejecutar.
-   - En algunos sistemas, debes hacer clic derecho → "Ejecutar en terminal"
-3. Registra tus actividades: running, ciclismo, etc.
-4. Tus datos se guardan en la carpeta 'data/'.
+Aplicación portable para registrar tus actividades:
+- Caminata, Running, Trail, Ciclismo, etc.
 
-Requisitos:
+No requiere instalación. Solo ejecútala desde esta carpeta.
+
+========================================
+       CÓMO USARLO EN LINUX
+========================================
+
+1. Conecta esta USB a una computadora con Linux.
+
+2. Abre una terminal en esta carpeta:
+   - Haz clic derecho → "Abrir en terminal"
+   - O navega con: cd /media/tu_usuario/TU_MEMORIA
+
+3. Da permiso de ejecución (solo la primera vez):
+   chmod +x iniciar.sh
+
+4. Ejecuta el programa:
+   - Haz doble clic en 'iniciar.sh' para ejecutar.
+
+✅ La primera vez puede tardar unos segundos.
+
+========================================
+       IMPORTANTE
+========================================
+
+- Los datos se guardan en la carpeta "data/"
+- No elimines ni muevas la carpeta "data"
+- Haz copias de seguridad de "data/registro.db"
+
+
+========================================
+       REQUISITOS
+========================================
 - Sistema Linux (Parrot, Ubuntu, etc.)
 - Tener instalado 'python3-tk' (si falla, ejecuta: sudo apt install python3-tk)
 
 Creado el: $(date '+%Y-%m-%d')
+
+¡Listo! Disfruta tu registro deportivo portable.
 EOF
 
 echo "✅ Archivo README.txt creado"
