@@ -1,4 +1,4 @@
-# 🏃‍♂️ Registro Deportivo
+# Registro Deportivo
 
 Aplicación portable para registrar actividades deportivas: caminata, running, trail running, ciclismo de montaña y más.
 
@@ -6,7 +6,7 @@ Desarrollada en Python con interfaz gráfica (Tkinter) y almacenamiento local (S
 
 ---
 
-## ✅ Características
+## Características
 
 - Interfaz gráfica fácil de usar
 - Registro de actividades con: tipo, fecha, hora de inicio/fin, duración, distancia, calorías, lugar y comentarios
@@ -18,7 +18,7 @@ Desarrollada en Python con interfaz gráfica (Tkinter) y almacenamiento local (S
 
 ---
 
-## 🚀 Cómo ejecutar (modo desarrollo)
+## Cómo ejecutar (modo desarrollo)
 
 1. Abre una terminal en la carpeta del proyecto.
 2. Crea y activa el entorno virtual:
@@ -62,7 +62,7 @@ Desarrollada en Python con interfaz gráfica (Tkinter) y almacenamiento local (S
     ```bash
     ./RegistroDeportivo     #Los datos se guardan automáticamente en data/registro.db
 
-## ▶️ Cómo ejecutar el programa empaquetado
+## Cómo ejecutar el programa empaquetado
     Linux:
     ```bash ./RegistroDeportivo
     
